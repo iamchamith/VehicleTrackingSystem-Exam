@@ -10,6 +10,7 @@ namespace Api.Controllers
     {
         public VehicleApiController()
         {
+
         }
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterVehicleCommand command)
@@ -21,8 +22,7 @@ namespace Api.Controllers
             }
             catch (Exception e)
             {
-
-                throw;
+                return ExceptionMapper(e);
             }
         }
         [HttpPost("authenticate"),]
@@ -33,9 +33,9 @@ namespace Api.Controllers
                 var result = await _mediator.Send(command);
                 return Ok(Helper.GenerateJSONWebToken(result, _configuration["AppSettings:JwtKey"]));
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                return ExceptionMapper(e);
             }
         }
     }

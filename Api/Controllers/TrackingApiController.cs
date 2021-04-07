@@ -12,16 +12,17 @@ namespace Api.Controllers
     public class TrackingApiController : BaseApiController
     {
         [HttpPost("trackings"), ModelValidation]
-        public async Task AddTrackings([FromBody] AddTrackInfoCommand request)
+        public async Task<IActionResult> AddTrackings([FromBody] AddTrackInfoCommand request)
         {
             try
             {
                 request.AddVehicleId(UserId);
-                await _mediator.Send(request);
+                var result = await _mediator.Send(request);
+                return Ok();
             }
             catch (Exception e)
             {
-                throw;
+                return ExceptionMapper(e);
             }
         }
 
@@ -35,9 +36,8 @@ namespace Api.Controllers
             }
             catch (Exception e)
             {
-                throw;
+                return ExceptionMapper(e);
             }
-
         }
         [HttpGet("{vehicleid}/trakings")]
         public async Task<IActionResult> GetLocationsByPeriod(string vehicleid, [FromQuery] DateTime fromDateTime, [FromQuery] DateTime toDateTime)
@@ -49,9 +49,8 @@ namespace Api.Controllers
             }
             catch (Exception e)
             {
-                throw;
+                return ExceptionMapper(e);
             }
         }
-
     }
 }

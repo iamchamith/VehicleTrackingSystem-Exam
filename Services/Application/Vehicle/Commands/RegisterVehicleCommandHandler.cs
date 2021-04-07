@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Core.Utilities;
+using MediatR;
 using Services.Repositories;
 using System;
 using System.Threading;
@@ -18,6 +19,10 @@ namespace Services.Application.Vehicle.Commands
         {
             try
             {
+                var vehicle = await _vehicleRepository.GetSingleAsync("VehicleId", request.VehicleId);
+                if (!vehicle.IsNull())
+                    throw new InvalidDataException("Your vehicle already registed");
+
                 var password = Guid.NewGuid().ToString().Split("-")[0]; 
                 await _vehicleRepository.Add(new Core.Entities.Vehicle.Vehicle(request.VehicleId.ToLower(), password));
                 return password;

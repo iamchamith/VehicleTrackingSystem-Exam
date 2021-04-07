@@ -23,7 +23,7 @@ namespace Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.RegisterIocConfig();
+            services.RegisterIocConfig(Configuration);
             services.AddSwaggerGen();
             services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly);
             new AutoMapperConfig(services).Register();
